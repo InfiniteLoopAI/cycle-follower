@@ -12,11 +12,17 @@ to do today.
 
 ## Get the app
 
-**[Download the latest APK from the Releases page →](https://github.com/InfiniteLoopAI/cycle-follower/releases/latest)**
+**[Download the APK from the Releases page →](https://github.com/InfiniteLoopAI/cycle-follower/releases)**
 
-1. Open that page **on the phone** and tap the `.apk` file.
+1. Open that page **on the phone** and tap the newest `.apk` file.
 2. Android will ask whether to allow installs from your browser. Allow it, then tap **Install**.
 3. Open Cycle Follower and answer the eight setup questions. Only one of them is required.
+
+Builds from `main` are published as normal releases, so once this is merged
+[`/releases/latest`](https://github.com/InfiniteLoopAI/cycle-follower/releases/latest) is the
+permanent link. Builds from any other branch are published as **pre-releases** under a rolling
+`dev-<branch>` tag — GitHub deliberately excludes pre-releases from `/releases/latest`, so use the
+full Releases list above until a `main` build exists.
 
 No Google Play, no account, no sign-in. Every build is signed with the same key, so a newer
 version installs straight over an older one.
