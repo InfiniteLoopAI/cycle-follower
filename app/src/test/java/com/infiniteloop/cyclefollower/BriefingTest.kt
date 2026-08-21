@@ -88,6 +88,20 @@ class BriefingTest {
     }
 
     @Test
+    fun `timing line reads as a sentence in every phase of the cycle`() {
+        // Caught "Ovulation around in 2 days (Sun 23 Aug)" -- dateWords already supplies the
+        // "in N days" wording, so any extra preposition in front of it reads as broken English.
+        val p = profile()
+        for (dayOffset in 0..40) {
+            val today = day1.plusDays(dayOffset.toLong())
+            val line = Briefings.build(p, CycleEngine.status(p, today), today).timingLine.orEmpty()
+            for (bad in listOf("around in ", "around today", "around tomorrow", "around yesterday", "  ")) {
+                assertFalse("bad phrasing '$bad' in: $line", line.contains(bad))
+            }
+        }
+    }
+
+    @Test
     fun `every phase has a guide and a one liner`() {
         CyclePhase.entries.forEach { phase ->
             val guide = PhaseGuides.of(phase)

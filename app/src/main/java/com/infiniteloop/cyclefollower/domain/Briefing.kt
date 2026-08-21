@@ -127,7 +127,8 @@ object Briefings {
             status.isLate -> "$bleedWord was expected ${dateWords(status.nextPeriodStart, today)}."
             status.daysUntilNextPeriod == 0 -> "$bleedWord expected today."
             status.ovulationDate != null && status.ovulationDate.isAfter(today) ->
-                "Ovulation around ${dateWords(status.ovulationDate, today)}. " +
+                // dateWords() already supplies "in 2 days (Sun 23 Aug)", so no "around" prefix here.
+                "Ovulation ${dateWords(status.ovulationDate, today)}. " +
                     "$bleedWord expected ${dateWords(status.nextPeriodStart, today)}."
             else -> "$bleedWord expected ${dateWords(status.nextPeriodStart, today)}."
         }
