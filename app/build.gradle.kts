@@ -12,6 +12,11 @@ plugins {
 // CI overwrites this file from the KEYSTORE_BASE64 secret when that secret is configured.
 val sharedKeystore = rootProject.file("signing/cycle-follower.jks")
 
+// GitHub Actions sets an unconfigured secret to an EMPTY string rather than leaving the variable
+// unset, so `System.getenv(...) ?: default` would hand an empty password to the signer.
+fun signingEnv(name: String, fallback: String): String =
+    System.getenv(name)?.takeIf { it.isNotBlank() } ?: fallback
+
 android {
     namespace = "com.infiniteloop.cyclefollower"
     compileSdk = 35
@@ -29,9 +34,9 @@ android {
         if (sharedKeystore.exists()) {
             create("shared") {
                 storeFile = sharedKeystore
-                storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "cyclefollower"
-                keyAlias = System.getenv("KEY_ALIAS") ?: "cyclefollower"
-                keyPassword = System.getenv("KEY_PASSWORD") ?: "cyclefollower"
+                storePassword = signingEnv("KEYSTORE_PASSWORD", "cyclefollower")
+                keyAlias = signingEnv("KEY_ALIAS", "cyclefollower")
+                keyPassword = signingEnv("KEY_PASSWORD", "cyclefollower")
             }
         }
     }
