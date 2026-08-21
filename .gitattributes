@@ -1,2 +1,10 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# The Gradle wrapper must keep LF endings or the CI runner cannot execute it,
+# and the wrapper jar must never be line-ending normalised.
+gradlew text eol=lf
+*.jar binary
+*.jks binary
+*.keystore binary
+*.png binary

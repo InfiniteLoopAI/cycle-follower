@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Cycle Follower</string>
+    <string name="widget_description">Today\'s cycle day, phase and a one-line hint.</string>
+    <string name="notification_channel_name">Daily hint</string>
+    <string name="notification_channel_description">One short message each morning about where she is in her cycle.</string>
+</resources>
