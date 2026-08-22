@@ -20,6 +20,9 @@ the app has no internet permission at all.
   <img src="docs/screenshots/learn.png" width="270" alt="The Learn reference section" />
   <img src="docs/screenshots/notification.png" width="270" alt="The daily morning notification" />
 </p>
+<p align="center">
+  <img src="docs/screenshots/widget.png" width="420" alt="The home screen widget" />
+</p>
 
 ---
 
