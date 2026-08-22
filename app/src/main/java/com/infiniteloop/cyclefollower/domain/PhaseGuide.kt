@@ -18,6 +18,8 @@ data class PhaseGuide(
     val doThis: List<String>,
     val avoidThis: List<String>,
     val goodTimeFor: List<String>,
+    /** What is physically going on down there this phase, and what it means for sex. */
+    val intimacy: String,
     val energy: Level,
     val libido: Level,
     val socialBattery: Level,
@@ -70,6 +72,13 @@ object PhaseGuides {
             "Cooking for her and handling the household",
             "Quiet, low-demand time together",
         ),
+        intimacy = "Estrogen is at its lowest point, so the vaginal walls are at their least plump and natural " +
+            "lubrication is the scarcest of the month -- menstrual fluid is not lubrication and does not behave " +
+            "like it. The cervix sits low and feels firm, and it is slightly open to let the flow out, which is " +
+            "why deep penetration is more likely to bump it and can hurt sharply. Add cramping and the whole " +
+            "area is already sore. Desire genuinely splits: some people want sex more now, partly because " +
+            "orgasm can ease cramps through muscle release and endorphins, and many want nothing near them. If " +
+            "it happens, shallower angles, plenty of lubricant, a towel, and no assumptions.",
         energy = Level.VERY_LOW,
         libido = Level.VARIES,
         socialBattery = Level.LOW,
@@ -114,6 +123,10 @@ object PhaseGuides {
             "Social events, travel, anything ambitious",
             "Trying something new together",
         ),
+        intimacy = "Estrogen is climbing, and it rebuilds the vaginal tissue as it goes: the walls thicken, blood flow " +
+            "improves and natural lubrication returns and increases week on week. The cervix is starting to " +
+            "rise and soften. Comfort improves noticeably day by day and desire usually rises with it. Not the " +
+            "peak yet, but easy and unhurried -- often the nicest stretch for taking your time.",
         energy = Level.HIGH,
         libido = Level.MEDIUM,
         socialBattery = Level.HIGH,
@@ -158,6 +171,13 @@ object PhaseGuides {
             "Sex -- with contraception handled deliberately either way",
             "Anything that needs her at her most confident",
         ),
+        intimacy = "Estrogen is near its maximum, and this is physically the easiest stretch of her month. Blood flow " +
+            "is highest so the tissue is at its plumpest and most elastic, and natural lubrication is at its " +
+            "most abundant and slippery -- the clear, stretchy, egg-white mucus is part of that. The cervix has " +
+            "moved high and turned soft; the standard description is that it changes from feeling like the tip " +
+            "of your nose to feeling like your lips, and it opens slightly. A high cervix means more room, so " +
+            "deep penetration is most comfortable now. It is also the window where pregnancy is possible, so " +
+            "contraception here is a deliberate decision rather than an afterthought.",
         energy = Level.VERY_HIGH,
         libido = Level.HIGH,
         socialBattery = Level.VERY_HIGH,
@@ -199,6 +219,10 @@ object PhaseGuides {
             "Sex, if a pregnancy is wanted -- and careful contraception if it is not",
             "Anything social or high-energy",
         ),
+        intimacy = "The peak of everything above: the cervix is at its highest, softest and most open, lubrication is " +
+            "at its maximum, and testosterone has desire at the highest point of the cycle. Two caveats. If she " +
+            "gets one-sided ovulation pain, deep penetration on that side can be uncomfortable for a day or so. " +
+            "And light spotting around now is harmless, not a period starting.",
         energy = Level.HIGH,
         libido = Level.VERY_HIGH,
         socialBattery = Level.HIGH,
@@ -241,6 +265,11 @@ object PhaseGuides {
             "Quiet, undemanding time together",
             "Getting ahead of anything that will be hard next week",
         ),
+        intimacy = "Progesterone takes over and reverses the changes: the cervix drops back down, firms up and closes, " +
+            "and the mucus turns thick, sticky and scant. Natural lubrication drops off noticeably from the " +
+            "ovulation peak even though the tissue is still reasonably plump. Comfort is fine but drier, so " +
+            "lubricant genuinely earns its place here -- reaching for it is about physiology, not a verdict on " +
+            "how much she wants you. Desire settles into a steady middle.",
         energy = Level.MEDIUM,
         libido = Level.MEDIUM,
         socialBattery = Level.MEDIUM,
@@ -250,8 +279,9 @@ object PhaseGuides {
 
     private val lateLuteal = PhaseGuide(
         phase = CyclePhase.LATE_LUTEAL,
-        title = "Late luteal phase - the PMS window",
-        tagline = "Hormones falling away fast. This is the stretch that asks the most of you.",
+        title = "PMS window",
+        tagline = "The last stretch of the luteal phase, with both hormones falling away fast. This is the " +
+            "part of the month that asks the most of you.",
         emoji = "⛈️",
         whatsHappening = "With no pregnancy, the corpus luteum breaks down and both progesterone and estrogen " +
             "drop sharply. Two things follow. Serotonin falls along with estrogen, which lowers mood and shortens " +
@@ -293,6 +323,12 @@ object PhaseGuides {
             "Low-demand evenings, takeaway, an early night",
             "Doing rather than discussing",
         ),
+        intimacy = "Estrogen and progesterone are both falling away, so lubrication is at its lowest of the month and " +
+            "the tissue is less plump. Everything is also more sensitive rather than more receptive: sore " +
+            "breasts, bloating and the first cramps. The cervix is low and firm, so deep penetration is the " +
+            "most likely to be uncomfortable now. Desire is usually at its lowest of the cycle. If it happens, " +
+            "slower and shallower with plenty of lubricant -- and if it does not, that is physiology, not " +
+            "rejection. Do not keep score.",
         energy = Level.LOW,
         libido = Level.LOW,
         socialBattery = Level.VERY_LOW,
@@ -327,6 +363,10 @@ object PhaseGuides {
             "Reading ovulation or fertility into this week. Neither is happening",
         ),
         goodTimeFor = listOf("Quiet nights", "Practical help rather than plans"),
+        intimacy = "During the hormone-free days there is no estrogen coming in, so lubrication and plumpness dip much " +
+            "as they would in a natural period week, alongside the withdrawal bleed. There are no fertile " +
+            "changes to read either: on the pill the cervix and the mucus stay largely static all month, so " +
+            "cervix position tells you nothing useful about timing.",
         energy = Level.LOW,
         libido = Level.LOW,
         socialBattery = Level.MEDIUM,
@@ -362,6 +402,12 @@ object PhaseGuides {
             "Assuming no bleeding means something is wrong. On these methods it usually does not",
         ),
         goodTimeFor = listOf("Anything -- there is no phase-based best or worst week right now"),
+        intimacy = "With hormone levels held flat there is no monthly swing in cervix position, mucus or lubrication " +
+            "-- the physical cues that fertility awareness relies on are switched off. Worth knowing: some " +
+            "hormonal methods reduce natural lubrication and libido as a genuine side effect, particularly some " +
+            "combined pills and the injection. Lubricant handles the first part. If it is a marked change from " +
+            "how things were before the method, that is worth raising with a doctor rather than quietly " +
+            "accepting.",
         energy = Level.MEDIUM,
         libido = Level.MEDIUM,
         socialBattery = Level.MEDIUM,

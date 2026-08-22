@@ -320,5 +320,10 @@ private fun PhaseDetail(guide: PhaseGuide, onBack: () -> Unit) {
         item {
             SectionCard(title = "Good time for") { BulletList(guide.goodTimeFor, marker = "→") }
         }
+        item {
+            SectionCard(title = "Sex and comfort") {
+                Text(guide.intimacy, style = MaterialTheme.typography.bodyMedium)
+            }
+        }
     }
 }

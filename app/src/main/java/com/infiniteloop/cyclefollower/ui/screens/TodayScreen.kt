@@ -107,10 +107,12 @@ fun TodayScreen(
             item {
                 CycleRing(
                     status = status,
-                    centerTop = if (status.isLate) "Cycle day" else "Cycle day",
+                    centerTop = "Cycle day",
                     centerMain = status.cycleDay.toString(),
-                    centerBottom = "${guide.emoji} ${guide.title}",
-                    modifier = Modifier.fillMaxWidth().height(230.dp),
+                    // Short name only: the full phase title would not fit inside the ring.
+                    // It is shown in full on the banner directly below.
+                    centerBottom = "${guide.emoji} ${status.phase.shortName}",
+                    modifier = Modifier.fillMaxWidth().height(240.dp),
                 )
             }
 
@@ -122,7 +124,7 @@ fun TodayScreen(
                         .padding(16.dp),
                 ) {
                     Text(
-                        briefing.dayLabel,
+                        "${briefing.dayLabel}  ·  ${guide.title}",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = palette.onContainer,
@@ -187,6 +189,20 @@ fun TodayScreen(
                     Spacer(Modifier.height(12.dp))
                     Text(
                         "Typical for this phase, not a reading of her actual mood. She is still a person having a day.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
+            item {
+                SectionCard(title = "Sex and comfort today") {
+                    Text(guide.intimacy, style = MaterialTheme.typography.bodyMedium)
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        "This describes typical physiology, and nothing more. It does not tell you whether she " +
+                            "wants to, and a good day on the calendar is not an argument. Ask her; her answer " +
+                            "outranks the app every time.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

@@ -526,8 +526,92 @@ object Library {
         ),
     )
 
+    private val intimacy = Article(
+        id = "intimacy",
+        title = "Sex across the cycle",
+        subtitle = "Lubrication, the cervix, and which days are physically easiest",
+        emoji = "💗",
+        minutes = 5,
+        blocks = listOf(
+            Block.Para(
+                "The vagina is not the same environment all month. Estrogen changes how much blood reaches " +
+                    "the tissue, how thick and elastic the walls are, how much natural lubrication there is, and " +
+                    "where the cervix sits. Those are physical facts with practical consequences, and almost no " +
+                    "one gets taught them.",
+            ),
+            Block.Head("What estrogen does"),
+            Block.Para(
+                "Rising estrogen increases blood flow to the whole area, thickens the vaginal walls and makes " +
+                    "them more elastic, and drives the fluid that provides natural lubrication. So the tissue is " +
+                    "at its plumpest and most forgiving when estrogen peaks, just before ovulation, and at its " +
+                    "thinnest and driest when estrogen bottoms out during the period. The premenstrual days are " +
+                    "the other low point, because both hormones are falling away at once.",
+            ),
+            Block.Head("The cervix moves, and it changes texture"),
+            Block.Para(
+                "This is the part that surprises most people. Across the cycle the cervix physically travels up " +
+                    "and down and changes how it feels. Away from ovulation it sits low, feels firm and stays " +
+                    "closed. As ovulation approaches it rises, softens and opens slightly. The comparison used in " +
+                    "fertility awareness is that it goes from feeling like the tip of your nose to feeling like " +
+                    "your lips.",
+            ),
+            Block.Bullets(
+                listOf(
+                    "High, soft, open, and wet: around ovulation. Most room, most lubrication, most comfortable for deep penetration.",
+                    "Low, firm, closed, and dry: during the period and the premenstrual days. Least room, so deep penetration is the most likely to bump the cervix and hurt.",
+                ),
+            ),
+            Block.Head("So which days are physically easiest"),
+            Block.Numbered(
+                listOf(
+                    "The fertile window and ovulation -- roughly the five days before ovulation plus the day " +
+                        "after. Maximum lubrication, plumpest and most elastic tissue, cervix high and out of the " +
+                        "way, and the one stretch where desire has a hormonal push behind it. Also the days " +
+                        "pregnancy is possible, so decide about contraception on purpose.",
+                    "The follicular phase, after bleeding stops. Improving steadily, comfortable, unhurried.",
+                    "The early luteal phase. Fine, but noticeably drier as the mucus turns thick and scant. " +
+                        "Lubricant is genuinely useful here.",
+                    "The premenstrual days and days one to two of the period. The hardest: driest, most tender, " +
+                        "cervix low, and desire usually at its lowest.",
+                ),
+            ),
+            Block.Note(
+                title = "Lubricant is not an insult",
+                text = "Natural lubrication tracks estrogen, not how attractive you are or how much she wants " +
+                    "you. On most days of the month there is simply less of it, and on hormonal contraception " +
+                    "there can be less of it all the time. Treating lubricant as a normal part of sex rather than " +
+                    "a remedy for a problem removes a conversation neither of you enjoys.",
+            ),
+            Block.Note(
+                title = "This is physiology, not permission",
+                tone = NoteTone.GOLDEN,
+                text = "None of the above predicts whether she wants to have sex, and a favourable day on a " +
+                    "calendar is not an argument to make. Plenty of people want sex least when the app says the " +
+                    "body is most ready, and most during their period when it says the opposite. Desire is hers " +
+                    "to state and it outranks every number in this app. If you ever find yourself citing the app " +
+                    "to talk her into something, close it.",
+            ),
+            Block.Head("When pain means something"),
+            Block.Para(
+                "Occasional discomfort with a low cervix or on a dry day is ordinary. Sex that hurts regularly " +
+                    "is not, and it is not something to push through or work around quietly. Persistent pain has " +
+                    "real, treatable causes -- endometriosis, fibroids, infections, vaginismus, or low estrogen " +
+                    "from a contraceptive method, breastfeeding or perimenopause. Deep pain that follows the cycle, " +
+                    "or pain that has been getting worse, is worth a doctor rather than a change of position.",
+            ),
+            Block.Head("If she is on hormonal contraception"),
+            Block.Para(
+                "Steady hormones mean the cervix and the mucus stay roughly static all month, so none of the " +
+                    "cyclical cues above apply and there is nothing to time. Some methods also lower lubrication " +
+                    "and libido persistently as a side effect. That is a known effect of the method, not a fact " +
+                    "about her, and switching method often resolves it.",
+            ),
+        ),
+    )
+
     val articles: List<Article> = listOf(
-        basics, hormones, ovulation, pms, pain, contraception, mistakes, talking, redFlags, tracking,
+        basics, hormones, ovulation, intimacy, pms, pain, contraception, mistakes, talking, redFlags,
+        tracking,
     )
 
     fun byId(id: String): Article? = articles.firstOrNull { it.id == id }

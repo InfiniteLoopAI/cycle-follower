@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +29,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import com.infiniteloop.cyclefollower.domain.CycleStatus
 import com.infiniteloop.cyclefollower.domain.Level
@@ -179,11 +182,18 @@ fun CycleRing(
     val dark = isSystemInDarkTheme()
     val trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
     val markerRing = MaterialTheme.colorScheme.surface
+    val strokeWidth = 26.dp
+    val ringInset = 8.dp
 
-    Box(modifier, contentAlignment = Alignment.Center) {
-        Canvas(Modifier.fillMaxWidth().height(230.dp)) {
-            val strokeWidth = 26.dp.toPx()
-            val diameter = minOf(size.width, size.height) - strokeWidth - 8.dp.toPx()
+    BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
+        val extent = min(maxWidth, maxHeight)
+        // The label has to live inside the hole in the middle. Constraining it to the inner
+        // diameter is what stops long phase names from running underneath the coloured arc.
+        val innerDiameter = (extent - strokeWidth - ringInset) - strokeWidth * 2
+
+        Canvas(Modifier.size(extent)) {
+            val stroke = strokeWidth.toPx()
+            val diameter = size.minDimension - stroke - ringInset.toPx()
             val topLeft = Offset((size.width - diameter) / 2f, (size.height - diameter) / 2f)
             val arcSize = Size(diameter, diameter)
             val radius = diameter / 2f
@@ -195,22 +205,22 @@ fun CycleRing(
                 startAngle = 0f,
                 sweepAngle = 360f,
                 useCenter = false,
-                style = Stroke(width = strokeWidth),
+                style = Stroke(width = stroke),
                 topLeft = topLeft,
                 size = arcSize,
             )
 
             status.timeline.forEach { span ->
-                val start = ((span.startDay - 1) / total).coerceIn(0f, 1f)
-                val end = (span.endDay / total).coerceIn(0f, 1f)
-                val sweep = ((end - start) * 360f - 2f).coerceAtLeast(0f)
+                val spanStart = ((span.startDay - 1) / total).coerceIn(0f, 1f)
+                val spanEnd = (span.endDay / total).coerceIn(0f, 1f)
+                val sweep = ((spanEnd - spanStart) * 360f - 2f).coerceAtLeast(0f)
                 if (sweep <= 0f) return@forEach
                 drawArc(
                     color = phasePalette(span.phase, dark).accent,
-                    startAngle = -90f + start * 360f + 1f,
+                    startAngle = -90f + spanStart * 360f + 1f,
                     sweepAngle = sweep,
                     useCenter = false,
-                    style = Stroke(width = strokeWidth),
+                    style = Stroke(width = stroke),
                     topLeft = topLeft,
                     size = arcSize,
                 )
@@ -222,25 +232,31 @@ fun CycleRing(
                 center.x + (radius * cos(angleRad)).toFloat(),
                 center.y + (radius * sin(angleRad)).toFloat(),
             )
-            drawCircle(color = markerRing, radius = strokeWidth * 0.42f, center = markerCenter)
+            drawCircle(color = markerRing, radius = stroke * 0.42f, center = markerCenter)
             drawCircle(
                 color = phasePalette(status.phase, dark).accent,
-                radius = strokeWidth * 0.26f,
+                radius = stroke * 0.26f,
                 center = markerCenter,
             )
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.width(innerDiameter * 0.88f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Text(
                 centerTop,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
                 centerMain,
                 fontSize = 44.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
             )
             Text(
                 centerBottom,
@@ -248,7 +264,8 @@ fun CycleRing(
                 fontWeight = FontWeight.SemiBold,
                 color = phasePalette(status.phase, dark).accent,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 40.dp),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }

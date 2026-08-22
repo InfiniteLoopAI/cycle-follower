@@ -39,10 +39,17 @@ part: what to do today, what to avoid today, and what this week is a good week f
 dates worth knowing (fertile window, ovulation, next period, when the PMS window opens), and an
 honest read on how much to trust any of it.
 
-**Learn** — the reference section. Ten articles covering the cycle end to end, what each hormone
-actually does, how ovulation and fertility really work, PMS versus PMDD, period pain and what
-genuinely helps, how contraception changes everything, the mistakes men make, how to talk about it,
-and when something is worth seeing a doctor about.
+**Learn** — the reference section. Eleven articles covering the cycle end to end, what each hormone
+actually does, how ovulation and fertility really work, sex across the cycle, PMS versus PMDD,
+period pain and what genuinely helps, how contraception changes everything, the mistakes men make,
+how to talk about it, and when something is worth seeing a doctor about.
+
+**Sex and comfort** — a per-phase read on what is physically going on: how much natural lubrication
+there is, how plump and elastic the tissue is, and where the cervix is sitting and how soft it is
+(it rises and softens around ovulation, and sits low and firm during the period and the PMS days).
+That maps directly onto which days are physically easiest and which are most likely to be
+uncomfortable. It says plainly that this is physiology and not permission — it never predicts
+whether she wants to, and a good day on the calendar is not an argument.
 
 **Daily notification** — one message each morning with the cycle day, a short read on her likely
 mood, and one concrete thing to do. Time is configurable.

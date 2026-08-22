@@ -92,16 +92,17 @@ object Briefings {
         }
     }
 
-    private fun pmsBanner(profile: UserProfile, status: CycleStatus): String {
-        val daysToPeriod = status.daysUntilNextPeriod.coerceAtLeast(0)
-        val tail = if (daysToPeriod in 1..3) " Period due in ${plural(daysToPeriod, "day")}." else ""
-        return when {
-            profile.pmdd -> "PMDD window. This can be genuinely severe - lower every demand you can.$tail"
-            profile.pmsSeverity == PmsSeverity.SEVERE -> "Deep in the PMS window. Patience at its lowest this month.$tail"
-            profile.pmsSeverity == PmsSeverity.NONE -> "Premenstrual days, though she usually sails through them.$tail"
-            profile.pmsSeverity == PmsSeverity.MILD -> "Mildly premenstrual. Slightly shorter fuse than usual.$tail"
-            else -> "PMS window. Shorter fuse, lower energy - reduce friction, do not add any.$tail"
-        }
+    /**
+     * Deliberately does not name the phase or count down to the period: the phase title sits
+     * directly above this line and [timingLine] sits directly below it, so repeating either
+     * produced three near-identical sentences stacked on top of each other.
+     */
+    private fun pmsBanner(profile: UserProfile, status: CycleStatus): String = when {
+        profile.pmdd -> "PMDD days. This can be genuinely severe - lower every demand you can."
+        profile.pmsSeverity == PmsSeverity.SEVERE -> "Deep in it. Patience at its lowest point of the month."
+        profile.pmsSeverity == PmsSeverity.NONE -> "Premenstrual, though she usually sails through these days."
+        profile.pmsSeverity == PmsSeverity.MILD -> "Mildly premenstrual. Slightly shorter fuse than usual."
+        else -> "Shorter fuse and lower energy. Reduce friction today, and do not add any."
     }
 
     private fun summary(profile: UserProfile, status: CycleStatus, guide: PhaseGuide): String {

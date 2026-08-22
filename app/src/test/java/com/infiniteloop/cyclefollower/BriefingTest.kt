@@ -4,9 +4,11 @@ import com.infiniteloop.cyclefollower.data.Contraception
 import com.infiniteloop.cyclefollower.data.PmsSeverity
 import com.infiniteloop.cyclefollower.data.Symptom
 import com.infiniteloop.cyclefollower.data.UserProfile
+import com.infiniteloop.cyclefollower.domain.Block
 import com.infiniteloop.cyclefollower.domain.Briefings
 import com.infiniteloop.cyclefollower.domain.CycleEngine
 import com.infiniteloop.cyclefollower.domain.CyclePhase
+import com.infiniteloop.cyclefollower.domain.Library
 import com.infiniteloop.cyclefollower.domain.PhaseGuides
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -102,6 +104,42 @@ class BriefingTest {
     }
 
     @Test
+    fun `the banner does not repeat what is already shown around it`() {
+        // The Today card stacks: "Day 26 of 28 - <phase title>", then the banner, then the timing
+        // line. Repeating the phase name or the period countdown in the banner produced three
+        // near-identical sentences in a row, which is what this guards against.
+        for (dayOffset in 0..40) {
+            for (pms in PmsSeverity.entries) {
+                val p = profile(pms = pms)
+                val today = day1.plusDays(dayOffset.toLong())
+                val status = CycleEngine.status(p, today)
+                val b = Briefings.build(p, status, today)
+                if (b.needsSetup || status == null) continue
+
+                val title = PhaseGuides.of(status.phase).title
+                assertFalse(
+                    "banner repeats the phase title '$title': ${b.moodBanner}",
+                    b.moodBanner.contains(title, ignoreCase = true),
+                )
+                if (b.timingLine?.contains("expected in") == true && !status.isLate) {
+                    assertFalse(
+                        "banner repeats the period countdown: ${b.moodBanner}",
+                        b.moodBanner.contains("due in") || b.moodBanner.contains("expected in"),
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `phase titles stay short enough for a banner line and a notification title`() {
+        CyclePhase.entries.forEach { phase ->
+            val title = PhaseGuides.of(phase).title
+            assertTrue("phase title too long to sit on one line: '$title'", title.length <= 24)
+        }
+    }
+
+    @Test
     fun `every phase has a guide and a one liner`() {
         CyclePhase.entries.forEach { phase ->
             val guide = PhaseGuides.of(phase)
@@ -110,6 +148,28 @@ class BriefingTest {
             assertTrue(guide.avoidThis.isNotEmpty())
             assertTrue(guide.physical.isNotEmpty())
             assertTrue(guide.emotional.isNotEmpty())
+            assertTrue("no intimacy copy for $phase", guide.intimacy.isNotBlank())
+        }
+    }
+
+    @Test
+    fun `every article is complete and reachable by id`() {
+        assertTrue(Library.articles.isNotEmpty())
+        val ids = Library.articles.map { it.id }
+        assertEquals("duplicate article ids", ids.size, ids.distinct().size)
+        Library.articles.forEach { article ->
+            assertEquals(article, Library.byId(article.id))
+            assertTrue("empty article ${article.id}", article.blocks.isNotEmpty())
+            assertTrue(article.title.isNotBlank() && article.subtitle.isNotBlank())
+            article.blocks.forEach { block ->
+                when (block) {
+                    is Block.Head -> assertTrue(block.text.isNotBlank())
+                    is Block.Para -> assertTrue(block.text.isNotBlank())
+                    is Block.Note -> assertTrue(block.text.isNotBlank())
+                    is Block.Bullets -> assertTrue(block.items.isNotEmpty())
+                    is Block.Numbered -> assertTrue(block.items.isNotEmpty())
+                }
+            }
         }
     }
 }
