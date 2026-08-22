@@ -45,6 +45,10 @@ data class CycleStatus(
     val phaseLength: Int get() = currentSpan.length
     val daysLeftInPhase: Int get() = (currentSpan.endDay - cycleDay).coerceAtLeast(0)
     val isLate: Boolean get() = daysLate > 0
+
+    /** Days from today until the estimated ovulation date; negative once it has passed. */
+    val daysUntilOvulation: Int
+        get() = ovulationDate?.let { ChronoUnit.DAYS.between(today, it).toInt() } ?: Int.MIN_VALUE
     val isBleeding: Boolean get() = phase == CyclePhase.MENSTRUAL
     val progress: Float get() = (cycleDay.toFloat() / cycleLength.toFloat()).coerceIn(0f, 1f)
 

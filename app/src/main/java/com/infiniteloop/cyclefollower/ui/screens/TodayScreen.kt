@@ -173,8 +173,54 @@ fun TodayScreen(
             }
 
             item {
-                SectionCard(title = "What is happening in her body") {
-                    Text(guide.whatsHappening, style = MaterialTheme.typography.bodyMedium)
+                SectionCard(
+                    title = "Do this today",
+                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                ) {
+                    BulletList(guide.doThis, marker = "✓")
+                }
+            }
+
+            item {
+                SectionCard(
+                    title = "Avoid today",
+                    containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
+                ) {
+                    BulletList(guide.avoidThis, marker = "✕", markerColor = MaterialTheme.colorScheme.error)
+                }
+            }
+
+            item {
+                SectionCard(title = "Sex and comfort today") {
+                    Text(guide.intimacy, style = MaterialTheme.typography.bodyMedium)
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        "This describes typical physiology, and nothing more. It does not tell you whether she " +
+                            "wants to, and a good day on the calendar is not an argument. Ask her; her answer " +
+                            "outranks the app every time.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
+            if (status.phase == CyclePhase.FERTILE_WINDOW || status.phase == CyclePhase.OVULATION) {
+                item {
+                    Callout(
+                        title = "These are fertile days",
+                        text = "Sex on these days can result in pregnancy. Calendar predictions are not " +
+                            "contraception -- ovulation moves around, even in regular cycles. If a pregnancy " +
+                            "is not the plan, use an actual method.",
+                        tone = CalloutTone.WARNING,
+                    )
+                }
+            }
+
+            if (guide.goodTimeFor.isNotEmpty()) {
+                item {
+                    SectionCard(title = "Good week for") {
+                        BulletList(guide.goodTimeFor, marker = "→")
+                    }
                 }
             }
 
@@ -189,20 +235,6 @@ fun TodayScreen(
                     Spacer(Modifier.height(12.dp))
                     Text(
                         "Typical for this phase, not a reading of her actual mood. She is still a person having a day.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-
-            item {
-                SectionCard(title = "Sex and comfort today") {
-                    Text(guide.intimacy, style = MaterialTheme.typography.bodyMedium)
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        "This describes typical physiology, and nothing more. It does not tell you whether she " +
-                            "wants to, and a good day on the calendar is not an argument. Ask her; her answer " +
-                            "outranks the app every time.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -227,40 +259,8 @@ fun TodayScreen(
             }
 
             item {
-                SectionCard(
-                    title = "Do this today",
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
-                ) {
-                    BulletList(guide.doThis, marker = "✓")
-                }
-            }
-
-            item {
-                SectionCard(
-                    title = "Avoid today",
-                    containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
-                ) {
-                    BulletList(guide.avoidThis, marker = "✕", markerColor = MaterialTheme.colorScheme.error)
-                }
-            }
-
-            if (guide.goodTimeFor.isNotEmpty()) {
-                item {
-                    SectionCard(title = "Good week for") {
-                        BulletList(guide.goodTimeFor, marker = "→")
-                    }
-                }
-            }
-
-            if (status.phase == CyclePhase.FERTILE_WINDOW || status.phase == CyclePhase.OVULATION) {
-                item {
-                    Callout(
-                        title = "These are fertile days",
-                        text = "Sex on these days can result in pregnancy. Calendar predictions are not " +
-                            "contraception -- ovulation moves around, even in regular cycles. If a pregnancy " +
-                            "is not the plan, use an actual method.",
-                        tone = CalloutTone.WARNING,
-                    )
+                SectionCard(title = "What is happening in her body") {
+                    Text(guide.whatsHappening, style = MaterialTheme.typography.bodyMedium)
                 }
             }
 

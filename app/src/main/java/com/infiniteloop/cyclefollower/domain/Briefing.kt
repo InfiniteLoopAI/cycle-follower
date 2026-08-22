@@ -20,6 +20,8 @@ data class Briefing(
     val moodBanner: String,
     val summary: String,
     val timingLine: String?,
+    /** Very short countdown for the widget, where there is room for about four words. */
+    val shortTiming: String?,
     val likelySymptoms: List<Symptom>,
     val doNow: List<String>,
     val avoidNow: List<String>,
@@ -44,6 +46,7 @@ object Briefings {
                 likelySymptoms = emptyList(),
                 doNow = emptyList(),
                 avoidNow = emptyList(),
+                shortTiming = null,
                 needsSetup = true,
             )
         }
@@ -59,11 +62,31 @@ object Briefings {
             moodBanner = moodBanner(profile, status),
             summary = summary(profile, status, guide),
             timingLine = timingLine(profile, status, today),
+            shortTiming = shortTiming(profile, status),
             likelySymptoms = symptoms,
             doNow = guide.doThis.take(3),
             avoidNow = guide.avoidThis.take(2),
             warning = warning(profile, status),
         )
+    }
+
+    /**
+     * Four words at most. The widget is glanced at, not read, and the countdown to the next
+     * period is the single most useful thing to put in front of someone.
+     */
+    fun shortTiming(profile: UserProfile, status: CycleStatus): String? {
+        if (status.dataIsStale) return "Log her latest period"
+        if (!status.bleedingPredictable) return null
+        val bleed = if (profile.contraception.bleedIsWithdrawal) "Bleed" else "Period"
+        return when {
+            status.isLate -> "$bleed ${plural(status.daysLate, "day")} late"
+            status.phase == CyclePhase.MENSTRUAL -> "Day ${status.dayInPhase} of bleeding"
+            status.daysUntilNextPeriod == 0 -> "$bleed due today"
+            status.ovulationDate != null && status.daysUntilOvulation in 0..3 ->
+                if (status.daysUntilOvulation == 0) "Ovulating today"
+                else "Ovulation in ${plural(status.daysUntilOvulation, "day")}"
+            else -> "$bleed in ${plural(status.daysUntilNextPeriod, "day")}"
+        }
     }
 
     fun dayLabel(status: CycleStatus): String = when {

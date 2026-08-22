@@ -50,6 +50,9 @@ you can have is **notified, then one tap**:
 An in-app update checker is deliberately *not* built in: it would require the `INTERNET`
 permission, which is the one thing keeping this app provably unable to leak anything.
 
+**Which build have you got?** Settings → About shows it, e.g. `Cycle Follower 1.0.0.12`. The
+number after the version is the CI build, and it matches the release name on the Releases page.
+
 ---
 
 ## What it does
@@ -146,7 +149,8 @@ Needs JDK 17 and the Android SDK (compileSdk 35).
 
 `.github/workflows/build-apk.yml` does the same on every push and publishes the APK to Releases.
 `versionCode` comes from the CI run number, so every published build is a genuine update as far as
-Android is concerned.
+Android is concerned. A local build has `versionCode 1`, so installing one over a release build is
+a downgrade and Android will refuse it — use `adb install -r -d`, or uninstall first.
 
 ### About the signing key — read this before you trust a build
 

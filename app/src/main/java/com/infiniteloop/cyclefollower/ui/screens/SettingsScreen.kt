@@ -26,8 +26,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.infiniteloop.cyclefollower.BuildConfig
 import com.infiniteloop.cyclefollower.data.Contraception
 import com.infiniteloop.cyclefollower.data.PmsSeverity
 import com.infiniteloop.cyclefollower.data.Symptom
@@ -247,6 +249,18 @@ fun SettingsScreen(profile: UserProfile, viewModel: AppViewModel) {
 
         item {
             SectionCard(title = "About") {
+                Text(
+                    "Cycle Follower ${BuildConfig.VERSION_NAME}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    "Check github.com/InfiniteLoopAI/cycle-follower/releases for a newer build.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(Modifier.height(12.dp))
                 Text(Library.DISCLAIMER, style = MaterialTheme.typography.bodyMedium)
             }
         }

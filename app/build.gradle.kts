@@ -68,6 +68,9 @@ android {
     }
     buildFeatures {
         compose = true
+        // So the app can show which build it is -- otherwise there is no way to tell whether a
+        // phone has the latest release.
+        buildConfig = true
     }
     lint {
         abortOnError = false

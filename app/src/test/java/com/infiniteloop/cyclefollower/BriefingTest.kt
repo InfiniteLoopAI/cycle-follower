@@ -140,6 +140,31 @@ class BriefingTest {
     }
 
     @Test
+    fun `the widget countdown stays short and never contradicts the phase`() {
+        for (dayOffset in 0..40) {
+            for (contraception in Contraception.entries) {
+                val p = profile(contraception = contraception)
+                val today = day1.plusDays(dayOffset.toLong())
+                val status = CycleEngine.status(p, today) ?: continue
+                val short = Briefings.shortTiming(p, status)
+                if (short == null) {
+                    // Only methods with genuinely unpredictable bleeding may omit it.
+                    assertTrue(contraception.bleedingUnpredictable)
+                    continue
+                }
+                assertTrue("widget countdown too long: '$short'", short.length <= 24)
+                if (status.phase == CyclePhase.MENSTRUAL && !status.isLate) {
+                    assertTrue("bleeding day should say so: '$short'", short.contains("bleeding"))
+                }
+                if (status.ovulationSuppressed) {
+                    assertFalse("suppressed method must not mention ovulation: '$short'",
+                        short.contains("Ovulat", ignoreCase = true))
+                }
+            }
+        }
+    }
+
+    @Test
     fun `every phase has a guide and a one liner`() {
         CyclePhase.entries.forEach { phase ->
             val guide = PhaseGuides.of(phase)
