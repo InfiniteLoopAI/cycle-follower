@@ -17,6 +17,12 @@ val sharedKeystore = rootProject.file("signing/cycle-follower.jks")
 fun signingEnv(name: String, fallback: String): String =
     System.getenv(name)?.takeIf { it.isNotBlank() } ?: fallback
 
+// Every published build needs a distinct, increasing versionCode: Android uses it to decide
+// whether an APK is an update, and update checkers use it to decide whether one is available.
+// CI supplies the run number; local builds fall back to 1.
+val baseVersion = "1.0.0"
+val buildNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 0
+
 android {
     namespace = "com.infiniteloop.cyclefollower"
     compileSdk = 35
@@ -25,8 +31,8 @@ android {
         applicationId = "com.infiniteloop.cyclefollower"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = if (buildNumber > 0) buildNumber else 1
+        versionName = if (buildNumber > 0) "$baseVersion.$buildNumber" else baseVersion
         vectorDrawables { useSupportLibrary = true }
     }
 

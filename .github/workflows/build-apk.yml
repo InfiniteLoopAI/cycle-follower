@@ -55,7 +55,7 @@ jobs:
         id: apk
         run: |
           set -euo pipefail
-          VERSION=$(grep -o 'versionName = "[^"]*"' app/build.gradle.kts | head -1 | cut -d'"' -f2)
+          VERSION=$(grep -o 'baseVersion = "[^"]*"' app/build.gradle.kts | head -1 | cut -d'"' -f2)
           SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
           NAME="CycleFollower-${VERSION}-build${GITHUB_RUN_NUMBER}-${SHORT_SHA}.apk"
           mkdir -p dist
