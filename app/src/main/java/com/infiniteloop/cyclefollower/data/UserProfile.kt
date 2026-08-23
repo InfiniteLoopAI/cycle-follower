@@ -49,6 +49,20 @@ data class UserProfile(
      * personal shows on a lock screen someone else might glance at.
      */
     val discreetMode: Boolean = false,
+
+    /** Evening warning the day before a new phase starts, while there is still time to act. */
+    val headsUpNotification: Boolean = true,
+    val headsUpHour: Int = 20,
+    val headsUpMinute: Int = 0,
+
+    /** Require the device lock (fingerprint, face or PIN) before the app opens. */
+    val appLock: Boolean = false,
+
+    /** Blank the app-switcher thumbnail so the contents do not show when switching apps. */
+    val secureScreen: Boolean = false,
+
+    /** One entry per day the partner logged how it actually went. Newest first. */
+    val dayLogs: List<DayLog> = emptyList(),
 ) {
     val lastPeriodStart: LocalDate? get() = periodStarts.maxOrNull()
 
@@ -64,7 +78,19 @@ data class UserProfile(
         periodLength = periodLength.coerceIn(1, 12),
         notificationHour = notificationHour.coerceIn(0, 23),
         notificationMinute = notificationMinute.coerceIn(0, 59),
+        headsUpHour = headsUpHour.coerceIn(0, 23),
+        headsUpMinute = headsUpMinute.coerceIn(0, 59),
+        // Keep roughly a year of daily logs; older ones no longer describe her current pattern.
+        dayLogs = dayLogs.distinctBy { it.date }.sortedByDescending { it.date }.take(400),
     )
+
+    fun logFor(date: LocalDate): DayLog? = dayLogs.firstOrNull { it.date == date }
+
+    fun withDayLog(log: DayLog): UserProfile =
+        copy(dayLogs = listOf(log) + dayLogs.filterNot { it.date == log.date }).normalised()
+
+    fun withoutDayLog(date: LocalDate): UserProfile =
+        copy(dayLogs = dayLogs.filterNot { it.date == date })
 
     fun withPeriodStart(date: LocalDate): UserProfile =
         copy(periodStarts = (periodStarts + date).distinct().sortedDescending()).normalised()

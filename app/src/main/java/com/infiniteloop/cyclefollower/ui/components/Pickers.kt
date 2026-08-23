@@ -28,12 +28,12 @@ fun LocalDate.shortLabel(): String = format(shortFormatter)
 fun LocalTime.label(): String = String.format(Locale.UK, "%02d:%02d", hour, minute)
 
 /**
- * Date picker restricted to the past year and never the future -- a period cannot start
- * tomorrow, and a stray future date would silently break every prediction.
+ * Date picker restricted to an explicit [minDate]..[maxDate] range. Defaults to the past two
+ * years so period logging cannot pick a future date, but the planner passes a forward range.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PastDatePickerDialog(
+fun BoundedDatePickerDialog(
     initial: LocalDate,
     onDismiss: () -> Unit,
     onPicked: (LocalDate) -> Unit,

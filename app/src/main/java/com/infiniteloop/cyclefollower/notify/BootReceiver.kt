@@ -11,7 +11,9 @@ class BootReceiver : BroadcastReceiver() {
             intent.action == Intent.ACTION_MY_PACKAGE_REPLACED
         ) {
             DailyHintScheduler.createChannel(context.applicationContext)
+            HeadsUp.createChannel(context.applicationContext)
             DailyHintScheduler.rescheduleFromProfile(context.applicationContext)
+            HeadsUp.rescheduleFromProfile(context.applicationContext)
         }
     }
 }

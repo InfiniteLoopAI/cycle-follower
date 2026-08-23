@@ -44,11 +44,13 @@ import com.infiniteloop.cyclefollower.domain.Briefings
 import com.infiniteloop.cyclefollower.domain.CycleEngine
 import com.infiniteloop.cyclefollower.domain.CyclePhase
 import com.infiniteloop.cyclefollower.ui.AppViewModel
+import com.infiniteloop.cyclefollower.ui.components.BoundedDatePickerDialog
 import com.infiniteloop.cyclefollower.ui.components.Callout
 import com.infiniteloop.cyclefollower.ui.components.CalloutTone
-import com.infiniteloop.cyclefollower.ui.components.PastDatePickerDialog
+import com.infiniteloop.cyclefollower.ui.components.CycleHistoryChart
 import com.infiniteloop.cyclefollower.ui.components.PhaseLegendRow
 import com.infiniteloop.cyclefollower.ui.components.SectionCard
+import com.infiniteloop.cyclefollower.ui.components.cycleLengthSeries
 import com.infiniteloop.cyclefollower.ui.components.shortLabel
 import com.infiniteloop.cyclefollower.ui.theme.phasePalette
 import java.time.LocalDate
@@ -163,6 +165,17 @@ fun CycleScreen(profile: UserProfile, viewModel: AppViewModel) {
             }
 
             item {
+                SectionCard(title = "Cycle length, most recent first logged") {
+                    val gaps = remember(profile) { CycleEngine.plausibleGaps(profile) }
+                    CycleHistoryChart(
+                        lengths = cycleLengthSeries(gaps),
+                        average = status.cycleLength,
+                        variability = status.variabilityDays,
+                    )
+                }
+            }
+
+            item {
                 SectionCard(title = "How solid these predictions are") {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         StatRow("Cycles logged", status.cyclesTracked.toString())
@@ -254,7 +267,7 @@ fun CycleScreen(profile: UserProfile, viewModel: AppViewModel) {
     }
 
     if (showDatePicker) {
-        PastDatePickerDialog(
+        BoundedDatePickerDialog(
             initial = profile.lastPeriodStart ?: today,
             onDismiss = { showDatePicker = false },
             onPicked = { viewModel.logPeriodStart(it) },

@@ -46,7 +46,7 @@ import com.infiniteloop.cyclefollower.ui.components.CalloutTone
 import com.infiniteloop.cyclefollower.ui.components.ChipGroup
 import com.infiniteloop.cyclefollower.ui.components.ChoiceList
 import com.infiniteloop.cyclefollower.ui.components.NumberStepper
-import com.infiniteloop.cyclefollower.ui.components.PastDatePickerDialog
+import com.infiniteloop.cyclefollower.ui.components.BoundedDatePickerDialog
 import com.infiniteloop.cyclefollower.ui.components.SectionCard
 import com.infiniteloop.cyclefollower.ui.components.SwitchRow
 import com.infiniteloop.cyclefollower.ui.components.TimePickerDialog
@@ -291,7 +291,7 @@ fun SetupScreen(profile: UserProfile, viewModel: AppViewModel) {
     }
 
     if (showDatePicker) {
-        PastDatePickerDialog(
+        BoundedDatePickerDialog(
             initial = profile.lastPeriodStart ?: today,
             onDismiss = { showDatePicker = false },
             onPicked = { viewModel.logPeriodStart(it) },

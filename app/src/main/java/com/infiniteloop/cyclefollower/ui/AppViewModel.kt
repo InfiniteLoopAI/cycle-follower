@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.infiniteloop.cyclefollower.data.ProfileRepository
 import com.infiniteloop.cyclefollower.data.UserProfile
 import com.infiniteloop.cyclefollower.notify.DailyHintScheduler
+import com.infiniteloop.cyclefollower.notify.HeadsUp
 import com.infiniteloop.cyclefollower.widget.CycleWidgetProvider
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +35,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun completeSetup() = update { it.copy(setupComplete = true) }
 
+    /** Wholesale replacement, used by restore. */
+    fun replaceProfile(profile: UserProfile) = update { profile }
+
     fun resetEverything() {
         viewModelScope.launch {
             repository.clear()
@@ -45,6 +49,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private fun afterChange() {
         val context = getApplication<Application>()
         DailyHintScheduler.rescheduleFromProfile(context)
+        HeadsUp.rescheduleFromProfile(context)
         CycleWidgetProvider.refresh(context)
     }
 }

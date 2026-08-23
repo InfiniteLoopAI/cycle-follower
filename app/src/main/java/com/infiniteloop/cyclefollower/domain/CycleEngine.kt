@@ -164,12 +164,31 @@ object CycleEngine {
     }
 
     /** How many days before the period the app should start flagging the PMS window. */
-    fun pmsWindow(profile: UserProfile, cycleLength: Int): Int {
+    /**
+     * The window implied by the severity setting alone, before any logged observation.
+     *
+     * Kept separate from [pmsWindow] on purpose: Personalisation needs to know what the app would
+     * have assumed WITHOUT the logs, and calling pmsWindow for that would recurse straight back
+     * into Personalisation.
+     */
+    fun configuredPmsWindow(profile: UserProfile, cycleLength: Int): Int {
         if (!profile.contraception.hasNaturalCycle) return 0
         val base = profile.pmsSeverity.windowDays
         val withPmdd = if (profile.pmdd) base + 3 else base
         // Never let the PMS window swallow more than half the cycle.
         return withPmdd.coerceIn(0, cycleLength / 2)
+    }
+
+    fun pmsWindow(profile: UserProfile, cycleLength: Int): Int {
+        if (!profile.contraception.hasNaturalCycle) return 0
+
+        // Logged days beat the setting: they are his own observations of her, and more recent.
+        val personal = Personalisation.of(profile)
+        val observed = personal.observedPmsStartDay
+        if (personal.hasEnoughData && observed != null) {
+            return (cycleLength - observed + 1).coerceIn(0, cycleLength / 2)
+        }
+        return configuredPmsWindow(profile, cycleLength)
     }
 
     fun buildTimeline(
@@ -256,28 +275,37 @@ object CycleEngine {
      * average would have it. Future dates repeat the predicted cycle forward.
      * Returns null before the first logged period, where there is genuinely nothing to say.
      */
-    fun dayInfo(profile: UserProfile, date: LocalDate): DayInfo? {
+    /** Where a date falls in the cycle, with no phase logic and so no dependency on the timeline. */
+    data class DayPosition(val cycleDay: Int, val cycleLength: Int, val predicted: Boolean)
+
+    fun positionOf(profile: UserProfile, date: LocalDate): DayPosition? {
         val starts = profile.periodStarts.distinct().sorted()
         val anchor = starts.lastOrNull { !it.isAfter(date) } ?: return null
         val nextLogged = starts.firstOrNull { it.isAfter(anchor) }
 
         val predictedLength = effectiveCycleLength(profile)
-        val periodLength = profile.periodLength.coerceIn(1, maxOf(1, minOf(10, predictedLength / 2)))
-
         var dayNumber = ChronoUnit.DAYS.between(anchor, date).toInt() + 1
         val measuredLength = nextLogged?.let { ChronoUnit.DAYS.between(anchor, it).toInt() }
 
-        val length: Int
-        val predicted: Boolean
-        if (measuredLength != null && dayNumber <= measuredLength) {
-            length = measuredLength.coerceIn(UserProfile.MIN_CYCLE_LENGTH, UserProfile.MAX_CYCLE_LENGTH)
-            predicted = false
+        return if (measuredLength != null && dayNumber <= measuredLength) {
+            DayPosition(
+                dayNumber,
+                measuredLength.coerceIn(UserProfile.MIN_CYCLE_LENGTH, UserProfile.MAX_CYCLE_LENGTH),
+                predicted = false,
+            )
         } else {
-            length = predictedLength
-            predicted = true
             // Roll forward through projected cycles for dates beyond the last logged period.
-            while (dayNumber > length) dayNumber -= length
+            while (dayNumber > predictedLength) dayNumber -= predictedLength
+            DayPosition(dayNumber, predictedLength, predicted = true)
         }
+    }
+
+    fun dayInfo(profile: UserProfile, date: LocalDate): DayInfo? {
+        val position = positionOf(profile, date) ?: return null
+        val dayNumber = position.cycleDay
+        val length = position.cycleLength
+        val predicted = position.predicted
+        val periodLength = profile.periodLength.coerceIn(1, maxOf(1, minOf(10, length / 2)))
 
         val ovulationCycleDay = if (profile.contraception.suppression == Suppression.FULL) null
         else (length - UserProfile.LUTEAL_PHASE_LENGTH).coerceAtLeast(6)

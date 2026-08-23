@@ -60,9 +60,20 @@ number after the version is the CI build, and it matches the release name on the
 
 ## What it does
 
-**Today** — the whole cycle as a ring with today marked on it, the phase she is in, and a plain
-read on her likely energy, patience, sex drive and social battery. Then the useful part: what to do
-today, what to avoid today, and what this week is a good week for.
+**Today** — actionable first. A status strip with the cycle day, phase and a one-line read, then
+today's three things: two to do, one to avoid. Coming-up tiles, the daily log, and the reference
+material behind disclosures rather than stacked above the advice.
+
+**Plan** — the app knows her next four months, so use it. Best weeks for a trip, a visit or a hard
+conversation; weeks to keep clear; and a date checker that answers "is the 26th a bad idea?" and
+suggests a nearer date that isn't.
+
+**Right now** — one button, only in the hard phases, for the moment it has actually gone wrong.
+Dark and short: what is going on, three things to say, three not to, one thing to do. No scrolling.
+
+**How was today?** — three taps. She never opens this app and logs nothing, so this is the only
+measurement it gets. After a couple of cycles it stops using the textbook PMS window and starts
+using hers, which is often a day or two out from the default.
 
 **Cycle** — a colour-coded month calendar, the phase-by-phase breakdown of the current cycle, the
 dates worth knowing (fertile window, ovulation, next period, when the PMS window opens), and an
@@ -81,6 +92,13 @@ uncomfortable. It says plainly that this is physiology and not permission.
 
 **Daily notification** — one message each morning with the cycle day, a short read on her likely
 mood, and one concrete thing to do about it.
+
+**A day's notice** — an evening warning the night before a new phase starts, and only then. The
+morning hint lands on the day it is already happening, which is too late to shop, cook or move a plan.
+
+**App lock and backup** — optional unlock with whatever the phone already uses, a blanked
+app-switcher thumbnail, and export/restore to a file you choose, with optional password encryption.
+Everything the app knows otherwise lives in one place on one handset.
 
 **Home screen widget** — cycle day, phase and the one-line mood read, without opening anything.
 
@@ -146,7 +164,7 @@ pregnancy. For anything medical, a doctor. For how she feels, ask her.
 Needs JDK 17 and the Android SDK (compileSdk 35).
 
 ```bash
-./gradlew testDebugUnitTest    # 32 unit tests over the prediction engine and the copy
+./gradlew testDebugUnitTest    # 60 unit tests over the engine, planner, personalisation and backup format
 ./gradlew assembleRelease      # -> app/build/outputs/apk/release/app-release.apk
 ```
 

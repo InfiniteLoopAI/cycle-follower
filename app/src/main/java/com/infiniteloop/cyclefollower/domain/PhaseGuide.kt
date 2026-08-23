@@ -20,6 +20,10 @@ data class PhaseGuide(
     val goodTimeFor: List<String>,
     /** What is physically going on down there this phase, and what it means for sex. */
     val intimacy: String,
+    /** Short things worth saying out loud in the moment. Quotable as-is. */
+    val sayNow: List<String>,
+    /** Short things that make the moment worse. Also quotable, as a warning. */
+    val dontSayNow: List<String>,
     val energy: Level,
     val libido: Level,
     val socialBattery: Level,
@@ -79,6 +83,16 @@ object PhaseGuides {
             "area is already sore. Desire genuinely splits: some people want sex more now, partly because " +
             "orgasm can ease cramps through muscle release and endorphins, and many want nothing near them. If " +
             "it happens, shallower angles, plenty of lubricant, a towel, and no assumptions.",
+        sayNow = listOf(
+            "Can I get you the hot water bottle?",
+            "I have got dinner. Go and lie down.",
+            "Do you want company or the room to yourself?",
+        ),
+        dontSayNow = listOf(
+            "Are you sure it is that bad?",
+            "You had it last month too.",
+            "Just take a painkiller.",
+        ),
         energy = Level.VERY_LOW,
         libido = Level.VARIES,
         socialBattery = Level.LOW,
@@ -127,6 +141,16 @@ object PhaseGuides {
             "improves and natural lubrication returns and increases week on week. The cervix is starting to " +
             "rise and soften. Comfort improves noticeably day by day and desire usually rises with it. Not the " +
             "peak yet, but easy and unhurried -- often the nicest stretch for taking your time.",
+        sayNow = listOf(
+            "You seem good today.",
+            "Do you fancy doing something this weekend?",
+            "Can I run something past you?",
+        ),
+        dontSayNow = listOf(
+            "Nothing here needs avoiding.",
+            "This is the week to raise the hard thing, not dodge it.",
+            "Do not save it all up for a worse week.",
+        ),
         energy = Level.HIGH,
         libido = Level.MEDIUM,
         socialBattery = Level.HIGH,
@@ -178,6 +202,16 @@ object PhaseGuides {
             "of your nose to feeling like your lips, and it opens slightly. A high cervix means more room, so " +
             "deep penetration is most comfortable now. It is also the window where pregnancy is possible, so " +
             "contraception here is a deliberate decision rather than an afterthought.",
+        sayNow = listOf(
+            "You look good. Let us go out.",
+            "I booked us something.",
+            "Come here.",
+        ),
+        dontSayNow = listOf(
+            "Not tonight, I am tired.",
+            "Leaving contraception to chance.",
+            "Assuming the mood will still be there next week.",
+        ),
         energy = Level.VERY_HIGH,
         libido = Level.HIGH,
         socialBattery = Level.VERY_HIGH,
@@ -223,6 +257,16 @@ object PhaseGuides {
             "at its maximum, and testosterone has desire at the highest point of the cycle. Two caveats. If she " +
             "gets one-sided ovulation pain, deep penetration on that side can be uncomfortable for a day or so. " +
             "And light spotting around now is harmless, not a period starting.",
+        sayNow = listOf(
+            "I am not going anywhere. What do you need?",
+            "Let us make a night of it.",
+            "Is that the one-sided pain again?",
+        ),
+        dontSayNow = listOf(
+            "Reading a short dip as something you did.",
+            "Treating today as a safe day.",
+            "Making a joke about her being keen.",
+        ),
         energy = Level.HIGH,
         libido = Level.VERY_HIGH,
         socialBattery = Level.HIGH,
@@ -270,6 +314,16 @@ object PhaseGuides {
             "ovulation peak even though the tissue is still reasonably plump. Comfort is fine but drier, so " +
             "lubricant genuinely earns its place here -- reaching for it is about physiology, not a verdict on " +
             "how much she wants you. Desire settles into a steady middle.",
+        sayNow = listOf(
+            "Shall we stay in and cook?",
+            "Early night?",
+            "I sorted the thing you were worried about.",
+        ),
+        dontSayNow = listOf(
+            "You never want to go out any more.",
+            "Filling the week with plans.",
+            "Reading a quiet night as losing interest.",
+        ),
         energy = Level.MEDIUM,
         libido = Level.MEDIUM,
         socialBattery = Level.MEDIUM,
@@ -329,6 +383,16 @@ object PhaseGuides {
             "most likely to be uncomfortable now. Desire is usually at its lowest of the cycle. If it happens, " +
             "slower and shallower with plenty of lubricant -- and if it does not, that is physiology, not " +
             "rejection. Do not keep score.",
+        sayNow = listOf(
+            "That sounds genuinely annoying.",
+            "You do not have to be good company tonight.",
+            "Do you want me to fix it, or just sit here?",
+        ),
+        dontSayNow = listOf(
+            "Is it your period?",
+            "You were fine about this last week.",
+            "Calm down / you are overreacting.",
+        ),
         energy = Level.LOW,
         libido = Level.LOW,
         socialBattery = Level.VERY_LOW,
@@ -367,6 +431,16 @@ object PhaseGuides {
             "as they would in a natural period week, alongside the withdrawal bleed. There are no fertile " +
             "changes to read either: on the pill the cervix and the mucus stay largely static all month, so " +
             "cervix position tells you nothing useful about timing.",
+        sayNow = listOf(
+            "Head again? I will keep it quiet in here.",
+            "I have got the evening.",
+            "Do you want the lights off?",
+        ),
+        dontSayNow = listOf(
+            "It is not even a real period.",
+            "You get this every month, surely you are used to it.",
+            "Booking anything that needs her on form.",
+        ),
         energy = Level.LOW,
         libido = Level.LOW,
         socialBattery = Level.MEDIUM,
@@ -408,6 +482,16 @@ object PhaseGuides {
             "combined pills and the injection. Lubricant handles the first part. If it is a marked change from " +
             "how things were before the method, that is worth raising with a doctor rather than quietly " +
             "accepting.",
+        sayNow = listOf(
+            "What is actually going on?",
+            "Is this a work thing or an us thing?",
+            "Tell me and I will listen.",
+        ),
+        dontSayNow = listOf(
+            "Blaming a cycle that is not running.",
+            "Is it hormonal?",
+            "Assuming today has a chemical explanation.",
+        ),
         energy = Level.MEDIUM,
         libido = Level.MEDIUM,
         socialBattery = Level.MEDIUM,

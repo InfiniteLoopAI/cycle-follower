@@ -3,4 +3,6 @@
     <string name="widget_description">Today\'s cycle day, phase and a one-line hint.</string>
     <string name="notification_channel_name">Daily hint</string>
     <string name="notification_channel_description">One short message each morning about where she is in her cycle.</string>
+    <string name="headsup_channel_name">Day ahead</string>
+    <string name="headsup_channel_description">An evening warning when tomorrow starts a new phase.</string>
 </resources>
