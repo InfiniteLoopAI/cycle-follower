@@ -6,6 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -71,106 +74,130 @@ fun TodayScreen(
     val briefing = remember(profile, status) { Briefings.build(profile, status, today) }
     val dark = isSystemInDarkTheme()
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(start = 22.dp, end = 22.dp, top = 24.dp, bottom = 24.dp),
-    ) {
-        Text(
-            today.format(headerFormat),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-
-        if (status == null) {
+    // Not set up yet: nothing to lay out, so handle it before the main column.
+    if (status == null) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(start = 22.dp, end = 22.dp, top = 24.dp, bottom = 24.dp),
+        ) {
+            Text(
+                today.format(headerFormat),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Spacer(Modifier.height(20.dp))
             Text("Today", style = MaterialTheme.typography.displaySmall)
             Spacer(Modifier.height(14.dp))
             Text(briefing.summary, style = MaterialTheme.typography.bodyLarge)
             Spacer(Modifier.height(22.dp))
             Button(onClick = onOpenDetail) { Text("Add her last period date") }
-            return@Column
         }
+        return
+    }
 
-        val palette = phasePalette(status.phase, dark)
-        val hardPhase = status.phase == CyclePhase.LATE_LUTEAL || status.phase == CyclePhase.MENSTRUAL
+    val palette = phasePalette(status.phase, dark)
+    val hardPhase = status.phase == CyclePhase.LATE_LUTEAL || status.phase == CyclePhase.MENSTRUAL
 
-        Spacer(Modifier.height(6.dp))
-        CycleRing(
-            status = status,
-            centerTop = "Cycle day",
-            centerMain = status.cycleDay.toString(),
-            centerBottom = status.phase.ringLabel,
-            modifier = Modifier.fillMaxWidth().height(240.dp),
-        )
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        // heightIn(min = viewport) gives the column a resolved height for SpaceBetween to work
+        // against, so the log row and link sit at the bottom on a short screen and scroll on a
+        // long one. A plain weight() cannot be used under verticalScroll.
+        val viewport = maxHeight
+        Column(
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .heightIn(min = viewport)
+                .padding(start = 22.dp, end = 22.dp, top = 24.dp, bottom = 24.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column {
+                Text(
+                    today.format(headerFormat),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
 
-        Spacer(Modifier.height(18.dp))
-        Text(
-            briefing.moodBanner,
-            fontSize = 19.sp,
-            lineHeight = 27.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
+                Spacer(Modifier.height(6.dp))
+                CycleRing(
+                    status = status,
+                    centerTop = "Cycle day",
+                    centerMain = status.cycleDay.toString(),
+                    centerBottom = status.phase.ringLabel,
+                    modifier = Modifier.fillMaxWidth().height(240.dp),
+                )
 
-        briefing.timingLine?.let {
-            Spacer(Modifier.height(8.dp))
-            Text(
-                it,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+                Spacer(Modifier.height(18.dp))
+                Text(
+                    briefing.moodBanner,
+                    fontSize = 19.sp,
+                    lineHeight = 27.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
 
-        briefing.warning?.let { warning ->
-            Spacer(Modifier.height(16.dp))
-            Text(
-                warning,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.error,
-            )
-        }
-
-        Spacer(Modifier.height(24.dp))
-        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            briefing.doNow.take(2).forEach { line ->
-                Row(verticalAlignment = Alignment.Top) {
-                    Box(
-                        Modifier
-                            .padding(top = 8.dp)
-                            .size(6.dp)
-                            .background(palette.accent, RoundedCornerShape(3.dp)),
+                briefing.timingLine?.let {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    Spacer(Modifier.width(12.dp))
-                    Text(line, style = MaterialTheme.typography.bodyLarge)
+                }
+
+                briefing.warning?.let { warning ->
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        warning,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+
+                Spacer(Modifier.height(24.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    briefing.doNow.take(2).forEach { line ->
+                        Row(verticalAlignment = Alignment.Top) {
+                            Box(
+                                Modifier
+                                    .padding(top = 8.dp)
+                                    .size(6.dp)
+                                    .background(palette.accent, RoundedCornerShape(3.dp)),
+                            )
+                            Spacer(Modifier.width(12.dp))
+                            Text(line, style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
+
+                // Only when it is the thing that actually matters today.
+                if (status.bleedingPredictable && (status.isLate || status.daysUntilNextPeriod in 0..1)) {
+                    Spacer(Modifier.height(18.dp))
+                    TextButton(
+                        onClick = { viewModel.logPeriodStart(today) },
+                        contentPadding = PaddingValues(0.dp),
+                    ) { Text("Her period started today") }
                 }
             }
-        }
 
-        // Only when it is the thing that actually matters today.
-        if (status.bleedingPredictable && (status.isLate || status.daysUntilNextPeriod in 0..1)) {
-            Spacer(Modifier.height(18.dp))
-            TextButton(
-                onClick = { viewModel.logPeriodStart(today) },
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
-            ) { Text("Her period started today") }
-        }
+            Column(Modifier.padding(top = 28.dp)) {
+                MoodRow(profile, today, viewModel, palette.accent)
 
-        Spacer(Modifier.height(28.dp))
-        MoodRow(profile, today, viewModel, palette.accent)
-
-        Spacer(Modifier.height(14.dp))
-        TextButton(
-            onClick = { if (hardPhase) onOpenRightNow() else onOpenDetail() },
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
-        ) {
-            Text(
-                if (hardPhase) "What is going on, and what not to say"
-                else "What is going on, and what this week is good for",
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold,
-            )
+                Spacer(Modifier.height(6.dp))
+                TextButton(
+                    onClick = { if (hardPhase) onOpenRightNow() else onOpenDetail() },
+                    contentPadding = PaddingValues(0.dp),
+                ) {
+                    Text(
+                        if (hardPhase) "What is going on, and what not to say"
+                        else "What is going on, and what this week is good for",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
         }
     }
 }
