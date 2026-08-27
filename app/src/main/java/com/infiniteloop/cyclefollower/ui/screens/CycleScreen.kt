@@ -43,6 +43,7 @@ import com.infiniteloop.cyclefollower.data.UserProfile
 import com.infiniteloop.cyclefollower.domain.Briefings
 import com.infiniteloop.cyclefollower.domain.CycleEngine
 import com.infiniteloop.cyclefollower.domain.CyclePhase
+import com.infiniteloop.cyclefollower.domain.Personalisation
 import com.infiniteloop.cyclefollower.ui.AppViewModel
 import com.infiniteloop.cyclefollower.ui.components.BoundedDatePickerDialog
 import com.infiniteloop.cyclefollower.ui.components.Callout
@@ -62,7 +63,7 @@ import java.util.Locale
 private val monthFormat = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.UK)
 
 @Composable
-fun CycleScreen(profile: UserProfile, viewModel: AppViewModel) {
+fun CycleScreen(profile: UserProfile, viewModel: AppViewModel, onOpenLog: () -> Unit) {
     val today = remember { LocalDate.now() }
     val status = remember(profile, today) { CycleEngine.status(profile, today) }
     val dark = isSystemInDarkTheme()
@@ -78,6 +79,21 @@ fun CycleScreen(profile: UserProfile, viewModel: AppViewModel) {
     ) {
         item {
             Text("Her cycle", style = MaterialTheme.typography.displaySmall)
+        }
+
+        item {
+            val personal = remember(profile) { Personalisation.of(profile) }
+            SectionCard(title = "What the app has worked out") {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    personal.insights.forEach { line ->
+                        Text(line, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+                Spacer(Modifier.height(12.dp))
+                OutlinedButton(onClick = onOpenLog, modifier = Modifier.fillMaxWidth()) {
+                    Text("How was today?")
+                }
+            }
         }
 
         if (status == null) {

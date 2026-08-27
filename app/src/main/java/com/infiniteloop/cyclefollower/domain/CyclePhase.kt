@@ -34,6 +34,22 @@ enum class CyclePhase(val displayName: String, val shortName: String) {
 
     val isNaturalCycle: Boolean
         get() = this != HORMONE_BREAK && this != STEADY_STATE
+
+    /**
+     * Short enough for the middle of the ring, where the label is constrained to the hole.
+     * [displayName] is too long there for the luteal phases.
+     */
+    val ringLabel: String
+        get() = when (this) {
+            MENSTRUAL -> "Period"
+            FOLLICULAR -> "Follicular"
+            FERTILE_WINDOW -> "Fertile window"
+            OVULATION -> "Ovulation"
+            EARLY_LUTEAL -> "Early luteal"
+            LATE_LUTEAL -> "PMS window"
+            HORMONE_BREAK -> "Break week"
+            STEADY_STATE -> "Steady"
+        }
 }
 
 /** A coarse level used for the "energy / libido / patience" meters on the Today screen. */

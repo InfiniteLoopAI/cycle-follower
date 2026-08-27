@@ -60,9 +60,10 @@ number after the version is the CI build, and it matches the release name on the
 
 ## What it does
 
-**Today** — actionable first. A status strip with the cycle day, phase and a one-line read, then
-today's three things: two to do, one to avoid. Coming-up tiles, the daily log, and the reference
-material behind disclosures rather than stacked above the advice.
+**Today** — one focal point. The cycle ring, one sentence on where she is, one quiet line of
+timing, and two things worth doing, as plain text. The daily log is three buttons at the bottom.
+Everything else — the science, sex and comfort, symptoms, energy levels, what the week is good for —
+is one tap away rather than stacked on the screen you look at every morning.
 
 **Plan** — the app knows her next four months, so use it. Best weeks for a trip, a visit or a hard
 conversation; weeks to keep clear; and a date checker that answers "is the 26th a bad idea?" and

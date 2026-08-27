@@ -50,6 +50,7 @@ import com.infiniteloop.cyclefollower.ui.screens.CycleScreen
 import com.infiniteloop.cyclefollower.ui.screens.LogScreen
 import com.infiniteloop.cyclefollower.ui.screens.PlanScreen
 import com.infiniteloop.cyclefollower.ui.screens.RightNowScreen
+import com.infiniteloop.cyclefollower.ui.screens.TodayDetailScreen
 import com.infiniteloop.cyclefollower.ui.screens.LearnScreen
 import com.infiniteloop.cyclefollower.ui.screens.SettingsScreen
 import com.infiniteloop.cyclefollower.ui.screens.SetupScreen
@@ -82,7 +83,7 @@ private enum class Tab(val label: String, val icon: ImageVector) {
 }
 
 /** Screens reached from Today rather than the bottom bar. */
-private enum class Overlay { RIGHT_NOW, LOG }
+private enum class Overlay { RIGHT_NOW, LOG, DETAIL }
 
 @Composable
 private fun AppRoot(viewModel: AppViewModel = viewModel()) {
@@ -134,9 +135,22 @@ private fun AppRoot(viewModel: AppViewModel = viewModel()) {
 
     when (overlay) {
         Overlay.RIGHT_NOW -> {
-            RightNowScreen(profile = loaded, onBack = { overlay = null })
+            RightNowScreen(
+                profile = loaded,
+                onBack = { overlay = null },
+                onOpenDetail = { overlay = Overlay.DETAIL },
+            )
             // Without this the system back gesture leaves the screen with no way out but the
             // on-screen button.
+            BackHandler { overlay = null }
+            return
+        }
+        Overlay.DETAIL -> {
+            Scaffold { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    TodayDetailScreen(profile = loaded, viewModel = viewModel, onBack = { overlay = null })
+                }
+            }
             BackHandler { overlay = null }
             return
         }
@@ -171,12 +185,15 @@ private fun AppRoot(viewModel: AppViewModel = viewModel()) {
                 Tab.TODAY -> TodayScreen(
                     profile = loaded,
                     viewModel = viewModel,
-                    onOpenLearn = { tab = Tab.LEARN },
                     onOpenRightNow = { overlay = Overlay.RIGHT_NOW },
-                    onOpenLog = { overlay = Overlay.LOG },
+                    onOpenDetail = { overlay = Overlay.DETAIL },
                 )
                 Tab.PLAN -> PlanScreen(profile = loaded)
-                Tab.CYCLE -> CycleScreen(profile = loaded, viewModel = viewModel)
+                Tab.CYCLE -> CycleScreen(
+                    profile = loaded,
+                    viewModel = viewModel,
+                    onOpenLog = { overlay = Overlay.LOG },
+                )
                 Tab.LEARN -> LearnScreen(profile = loaded)
                 Tab.SETTINGS -> SettingsScreen(profile = loaded, viewModel = viewModel)
             }

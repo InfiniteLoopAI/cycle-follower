@@ -55,7 +55,7 @@ private val DontInk = Color(0xFFF7E2E1)
  * happen. Deliberately dark, short, and free of anything that is not immediately usable.
  */
 @Composable
-fun RightNowScreen(profile: UserProfile, onBack: () -> Unit) {
+fun RightNowScreen(profile: UserProfile, onBack: () -> Unit, onOpenDetail: (() -> Unit)? = null) {
     val today = remember { LocalDate.now() }
     val status = remember(profile, today) { CycleEngine.status(profile, today) }
     val guide = remember(status) { status?.let { PhaseGuides.of(it.phase) } }
@@ -115,6 +115,14 @@ fun RightNowScreen(profile: UserProfile, onBack: () -> Unit) {
 
             item {
                 Panel(guide.doThis.firstOrNull().orEmpty(), title = "Then")
+            }
+
+            if (onOpenDetail != null) {
+                item {
+                    TextButton(onClick = onOpenDetail) {
+                        Text("More about today", color = Faint)
+                    }
+                }
             }
         }
     }
